@@ -2,5 +2,6 @@ import { Coordinates } from './coordinates.interface';
 import { Enemie } from './enemie.interface';
 export interface Scan {
   coordinates: Coordinates;
-  enemie: Enemie;
+  enemies: Enemie;
+  allies?: number;
 }

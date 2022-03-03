@@ -6,7 +6,7 @@ export enum ProtocolType {
   assistAllies = 'assist-allies',
   avoidCrossfire = 'avoid-crossfire',
   prioritizeMech = 'prioritize-mech',
-  avoidMech = 'avoidMesh',
+  avoidMech = 'avoid-mech',
 }
 
 export interface Radar {
