@@ -23,7 +23,7 @@ export class RadarService {
       protocols.includes(ProtocolType.avoidCrossfire)
     ) {
       console.log(ProtocolType.prioritizeMech);
-      result = this.getPrioritizeMechPoint(scan, false);
+      result = this.getPrioritizeMechPoint(scan, false, false);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
 
@@ -32,7 +32,7 @@ export class RadarService {
       protocols.includes(ProtocolType.prioritizeMech)
     ) {
       console.log(ProtocolType.prioritizeMech);
-      result = this.getPrioritizeMechPoint(scan, false);
+      result = this.getPrioritizeMechPoint(scan, false, true);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
 
@@ -65,7 +65,7 @@ export class RadarService {
 
     if (protocols.includes(ProtocolType.prioritizeMech)) {
       console.log(ProtocolType.prioritizeMech);
-      result = this.getPrioritizeMechPoint(scan, false);
+      result = this.getPrioritizeMechPoint(scan, false, true);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
 
@@ -173,7 +173,11 @@ export class RadarService {
     return result;
   }
 
-  getPrioritizeMechPoint(scans: Scan[], isFurthest: boolean): Result {
+  getPrioritizeMechPoint(
+    scans: Scan[],
+    isFurthest: boolean,
+    isAlies: boolean,
+  ): Result {
     const result = {
       ok: false,
       position: { x: 0, y: 0 },
@@ -183,6 +187,15 @@ export class RadarService {
 
     for (const scan of scans) {
       const dist = this.calculateDistance(scan.coordinates);
+      console.log(
+        'Point:',
+        scan.coordinates,
+        'Distance:',
+        dist,
+        'Alies:',
+        scan.allies,
+      );
+      if (!isAlies && scan.allies) continue;
       if (scan.enemies.type === EnemieType.mech) {
         if (dist < 100) {
           if (!isFurthest && dist < distance) {
