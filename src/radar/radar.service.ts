@@ -74,7 +74,6 @@ export class RadarService {
         }
       }
     }
-
     return result;
   }
 
@@ -107,7 +106,6 @@ export class RadarService {
         distance = dist;
       }
     }
-
     return result;
   }
 
@@ -123,7 +121,6 @@ export class RadarService {
         distance = dist;
       }
     }
-
     return result;
   }
 
@@ -150,7 +147,6 @@ export class RadarService {
         }
       }
     }
-
     return result;
   }
 
@@ -172,7 +168,6 @@ export class RadarService {
         }
       }
     }
-
     return result;
   }
 }
