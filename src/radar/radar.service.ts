@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Coordinates } from '@interfaces/coordinates.interface';
 import { ProtocolType, Radar } from '@interfaces/radar.interface';
-import { Result } from '@interfaces/result.interface';
 import { Scan } from '@interfaces/scan.interface';
 import { EnemieType } from '@interfaces/enemie.interface';
 
