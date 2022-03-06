@@ -7,8 +7,7 @@ import { EnemieType } from '@interfaces/enemie.interface';
 @Injectable()
 export class RadarService {
   calculateDistance({ x, y }: Coordinates): number {
-    const distance: number = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-    return distance;
+    return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
   }
 
   getObjetive({ protocols, scan }: Radar): Coordinates {
