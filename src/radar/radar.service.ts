@@ -4,6 +4,7 @@ import { ProtocolType, Radar } from '@interfaces/radar.interface';
 import { Result } from '@interfaces/result.interface';
 import { Scan } from '@interfaces/scan.interface';
 import { EnemieType } from '@interfaces/enemie.interface';
+import { Options } from '@interfaces/oprions.intarface';
 
 @Injectable()
 export class RadarService {
@@ -13,6 +14,67 @@ export class RadarService {
   }
 
   getObjetive({ protocols, scan }: Radar): Coordinates {
+    let result: Result = null;
+    const options: Options = {
+      isClosest: false,
+      isFurthest: false,
+      isAlies: false,
+      isCrossfile: false,
+      isMech: false,
+      isAvoid: false,
+    };
+
+    options.isClosest = protocols.includes(ProtocolType.closestEnemies);
+    options.isFurthest = protocols.includes(ProtocolType.furthestEnemies);
+    options.isAlies = protocols.includes(ProtocolType.assistAllies);
+    options.isCrossfile = protocols.includes(ProtocolType.avoidCrossfire);
+    options.isMech = protocols.includes(ProtocolType.prioritizeMech);
+    options.isAvoid = protocols.includes(ProtocolType.avoidMech);
+
+    result = this.getPoint(scan, options);
+
+    return result.ok ? result.position : { x: 0, y: 0 };
+  }
+
+  getPoint(
+    scans: Scan[],
+    { isClosest, isFurthest, isAlies, isCrossfile, isMech, isAvoid }: Options,
+  ): Result {
+    const result = {
+      ok: false,
+      position: { x: 0, y: 0 },
+    };
+
+    let distance = isClosest && !isFurthest ? 100 : 0;
+
+    for (const scan of scans) {
+      const dist = this.calculateDistance(scan.coordinates);
+
+      if (dist > 100) continue;
+
+      if (!isAlies && isCrossfile && scan.allies) continue;
+      if (isMech && !isAvoid && scan.enemies.type !== EnemieType.mech) continue;
+
+      console.log(scan);
+
+      if (isClosest && dist < distance) {
+        result.ok = true;
+        result.position = scan.coordinates;
+        distance = dist;
+      }
+      if ((!isClosest || (!isClosest && !isFurthest))  && dist > distance) {
+        result.ok = true;
+        result.position = scan.coordinates;
+        distance = dist;
+      }
+    }
+
+    console.log(result);
+
+    return result;
+  }
+
+  getObjetive2({ protocols, scan }: Radar): Coordinates {
     let result: Result;
 
     console.log(protocols);
@@ -187,14 +249,6 @@ export class RadarService {
 
     for (const scan of scans) {
       const dist = this.calculateDistance(scan.coordinates);
-      console.log(
-        'Point:',
-        scan.coordinates,
-        'Distance:',
-        dist,
-        'Alies:',
-        scan.allies,
-      );
       if (!isAlies && scan.allies) continue;
       if (scan.enemies.type === EnemieType.mech) {
         if (dist < 100) {
