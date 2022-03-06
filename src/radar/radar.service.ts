@@ -81,12 +81,11 @@ export class RadarService {
     for (const scan of scans) {
       if (scan.allies > 0) {
         const dist = this.calculateDistance(scan.coordinates);
-        if (dist < 100) {
-          if (dist < distance) {
-            distance = dist;
-            result.ok = true;
-            result.position = scan.coordinates;
-          }
+        if (dist > 100) continue;
+        if (dist < distance) {
+          distance = dist;
+          result.ok = true;
+          result.position = scan.coordinates;
         }
       }
     }
@@ -105,13 +104,12 @@ export class RadarService {
     for (const scan of scans) {
       if (!scan.allies) {
         const dist = this.calculateDistance(scan.coordinates);
-        if (dist < 100) {
-          if (dist < distance) {
-            result.ok = true;
-            result.position = scan.coordinates;
+        if (dist > 100) continue;
+        if (dist < distance) {
+          result.ok = true;
+          result.position = scan.coordinates;
 
-            distance = dist;
-          }
+          distance = dist;
         }
       }
     }
@@ -128,12 +126,11 @@ export class RadarService {
 
     for (const scan of scans) {
       const dist = this.calculateDistance(scan.coordinates);
-      if (dist < 100) {
-        if (dist < distance) {
-          result.ok = true;
-          result.position = scan.coordinates;
-          distance = dist;
-        }
+      if (dist > 100) continue;
+      if (dist < distance) {
+        result.ok = true;
+        result.position = scan.coordinates;
+        distance = dist;
       }
     }
 
@@ -150,12 +147,11 @@ export class RadarService {
 
     for (const scan of scans) {
       const dist = this.calculateDistance(scan.coordinates);
-      if (dist < 100) {
-        if (dist > distance) {
-          result.ok = true;
-          result.position = scan.coordinates;
-          distance = dist;
-        }
+      if (dist > 100) continue;
+      if (dist > distance) {
+        result.ok = true;
+        result.position = scan.coordinates;
+        distance = dist;
       }
     }
 
@@ -176,19 +172,18 @@ export class RadarService {
 
     for (const scan of scans) {
       const dist = this.calculateDistance(scan.coordinates);
+      if (dist > 100) continue;
       if (!isAlies && scan.allies) continue;
       if (scan.enemies.type === EnemieType.mech) {
-        if (dist < 100) {
-          if (!isFurthest && dist < distance) {
-            result.ok = true;
-            result.position = scan.coordinates;
-            distance = dist;
-          }
-          if (isFurthest && dist > distance) {
-            result.ok = true;
-            result.position = scan.coordinates;
-            distance = dist;
-          }
+        if (!isFurthest && dist < distance) {
+          result.ok = true;
+          result.position = scan.coordinates;
+          distance = dist;
+        }
+        if (isFurthest && dist > distance) {
+          result.ok = true;
+          result.position = scan.coordinates;
+          distance = dist;
         }
       }
     }
@@ -206,17 +201,17 @@ export class RadarService {
     for (const scan of scans) {
       if (scan.enemies.type !== EnemieType.mech) {
         const dist = this.calculateDistance(scan.coordinates);
-        if (dist < 100) {
-          if (!isFurthest && dist < distance) {
-            result.ok = true;
-            result.position = scan.coordinates;
-            distance = dist;
-          }
-          if (isFurthest && dist > distance) {
-            result.ok = true;
-            result.position = scan.coordinates;
-            distance = dist;
-          }
+        if (dist > 100) continue;
+
+        if (!isFurthest && dist < distance) {
+          result.ok = true;
+          result.position = scan.coordinates;
+          distance = dist;
+        }
+        if (isFurthest && dist > distance) {
+          result.ok = true;
+          result.position = scan.coordinates;
+          distance = dist;
         }
       }
     }
