@@ -15,14 +15,11 @@ export class RadarService {
   getObjetive({ protocols, scan }: Radar): Coordinates {
     let result: Result;
 
-    console.log(protocols);
-
     if (
       protocols.includes(ProtocolType.closestEnemies) &&
       protocols.includes(ProtocolType.prioritizeMech) &&
       protocols.includes(ProtocolType.avoidCrossfire)
     ) {
-      console.log(ProtocolType.prioritizeMech);
       result = this.getPrioritizeMechPoint(scan, false, false);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
@@ -31,19 +28,16 @@ export class RadarService {
       protocols.includes(ProtocolType.closestEnemies) &&
       protocols.includes(ProtocolType.prioritizeMech)
     ) {
-      console.log(ProtocolType.prioritizeMech);
       result = this.getPrioritizeMechPoint(scan, false, true);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
 
     if (protocols.includes(ProtocolType.assistAllies)) {
-      console.log(ProtocolType.assistAllies);
       result = this.getAssistAlliesPoint(scan);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
 
     if (protocols.includes(ProtocolType.avoidCrossfire)) {
-      console.log(ProtocolType.avoidCrossfire);
       result = this.getAvoidCrossFirePoint(scan);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
@@ -52,31 +46,26 @@ export class RadarService {
       protocols.includes(ProtocolType.furthestEnemies) &&
       protocols.includes(ProtocolType.avoidMech)
     ) {
-      console.log('2', ProtocolType.avoidMech, ProtocolType.furthestEnemies);
       result = this.getAvoidMechPoint(scan, true);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
 
     if (protocols.includes(ProtocolType.avoidMech)) {
-      console.log('1', ProtocolType.avoidMech);
       result = this.getAvoidMechPoint(scan, false);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
 
     if (protocols.includes(ProtocolType.prioritizeMech)) {
-      console.log(ProtocolType.prioritizeMech);
       result = this.getPrioritizeMechPoint(scan, false, true);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
 
     if (protocols.includes(ProtocolType.closestEnemies)) {
-      console.log(ProtocolType.closestEnemies);
       result = this.getClosestEnemiesPoint(scan);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
 
     if (protocols.includes(ProtocolType.furthestEnemies)) {
-      console.log(ProtocolType.furthestEnemies);
       result = this.getFurthestEnemiesPoint(scan);
       return result.ok ? result.position : { x: 0, y: 0 };
     }
@@ -187,14 +176,6 @@ export class RadarService {
 
     for (const scan of scans) {
       const dist = this.calculateDistance(scan.coordinates);
-      console.log(
-        'Point:',
-        scan.coordinates,
-        'Distance:',
-        dist,
-        'Alies:',
-        scan.allies,
-      );
       if (!isAlies && scan.allies) continue;
       if (scan.enemies.type === EnemieType.mech) {
         if (dist < 100) {
@@ -220,7 +201,6 @@ export class RadarService {
       ok: false,
       position: { x: 0, y: 0 },
     };
-    console.log('Avoid-mech function');
     let distance = isFurthest ? 0 : 100;
 
     for (const scan of scans) {
